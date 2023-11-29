@@ -122,7 +122,7 @@ s7 <- s6+
   )
 s7
 
-# add baubels
+# add gold baubles
 s8 <- s7 +
   geom_point(colour = "gold",
              data = data.frame(
@@ -135,8 +135,21 @@ s8 <- s7 +
   scale_size_identity()
 s8
 
-# add text
+# add red baubles
 s9 <- s8 +
+  geom_point(colour = "red3",
+             data = data.frame(
+               x = c(0.7, 0.6, 0.5, 0.525, 0.43, 0.38, 0.55, 0.5),
+               y = c(0.375, 0.4, 0.55, 0.65, 0.43, 0.48, 0.5, 0.375),
+               size = runif(8, 2, 4.5)
+             ),
+             mapping = aes(x = x, y = y, size = size)
+  ) +
+  scale_size_identity()
+s9
+
+# add text
+s10 <- s9 +
   annotate(
     geom = "text",
     x = 0.5,
@@ -146,24 +159,24 @@ s9 <- s8 +
     fontface = "bold",
     size = 18
   )
-s9
+s10
 
 # add logo 
 path <- "images/rwds-logo-150px.png"
 img <- readPNG(path, native = TRUE) 
-s10 <- s9 +                   
+s11 <- s10 +                   
   inset_element(p = img, 
                 left = 0.3265, 
                 bottom = 0.0, 
                 right = 0.6735, 
                 top = 0.2
   ) 
-s10
+s11
 
 ggsave(
   filename = "rwds-christmas-card.png",
   path = "images",
-  plot = s10,
+  plot = s11,
   width = 563,
   height = 563,
   units = c("px"),
