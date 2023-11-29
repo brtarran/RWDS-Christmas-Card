@@ -159,3 +159,13 @@ s10 <- s9 +
                 top = 0.2
   ) 
 s10
+
+ggsave(
+  filename = "rwds-christmas-card.png",
+  path = "images",
+  plot = s10,
+  width = 563,
+  height = 563,
+  units = c("px"),
+  dpi = 72
+)
