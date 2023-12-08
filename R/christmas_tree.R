@@ -159,9 +159,9 @@ s9
 ggsave(
   filename = "rwds-christmas-card.png",
   path = "images",
-  plot = s11,
-  width = 563,
-  height = 563,
+  plot = s9,
+  width = 600,
+  height = 600,
   units = c("px"),
   dpi = 72
 )
