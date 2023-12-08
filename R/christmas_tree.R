@@ -1,14 +1,14 @@
 library(ggplot2)
 library(ggforce)
 library(sf)
-library("png") 
-library("patchwork") 
+library(png)
+library(patchwork) 
 
 # sky
 s1 <- ggplot() +
   theme_void() +
   theme(
-    plot.background = element_rect(fill = "#939bc9")
+    plot.background = element_rect(fill = "#939bc9", color = "#939bc9")
   )
 s1
 
@@ -44,7 +44,7 @@ s3 <- s2 +
   coord_fixed(expand = FALSE)
 s3
 
-# add tree base
+# coordinates for tree base
 tree_pts1 <- matrix(
   c(
     0.2, 0.3,
@@ -55,18 +55,8 @@ tree_pts1 <- matrix(
   ncol = 2,
   byrow = TRUE
 )
-tree1 <- st_polygon(list(tree_pts1))
-plot(tree1)
-s4 <- s3 +
-  geom_sf(
-    data = tree1,
-    fill = "chartreuse4",
-    colour = "chartreuse4"
-  ) +
-  coord_sf(expand = FALSE)
-s4
 
-# add tree middle
+# coordinates for tree middle
 tree_pts2 <- matrix(
   c(
     0.3, 0.5,
@@ -77,18 +67,8 @@ tree_pts2 <- matrix(
   ncol = 2,
   byrow = TRUE
 )
-tree2 <- st_polygon(list(tree_pts2))
-plot(tree2)
-s5 <- s4 +
-  geom_sf(
-    data = tree2,
-    fill = "chartreuse4",
-    colour = "chartreuse4"
-  ) +
-  coord_sf(expand = FALSE)
-s5
 
-# add tree top
+# coordinates for tree top
 tree_pts3 <- matrix(
   c(
     0.4, 0.65,
@@ -99,19 +79,22 @@ tree_pts3 <- matrix(
   ncol = 2,
   byrow = TRUE
 )
-tree3 <- st_polygon(list(tree_pts3))
-plot(tree3)
-s6 <- s5 +
+
+# put tree together
+tree <- st_multipolygon(list(list(tree_pts1),
+                             list(tree_pts2),
+                             list(tree_pts3)))
+s4 <- s3 +
   geom_sf(
-    data = tree3,
+    data = tree,
     fill = "chartreuse4",
     colour = "chartreuse4"
   ) +
   coord_sf(expand = FALSE)
-s6
+s4
 
 # add trunk
-s7 <- s6+
+s5 <- s4+
   annotate(
     geom = "rect",
     xmin = 0.45,
@@ -120,10 +103,10 @@ s7 <- s6+
     ymax = 0.3,
     fill = "brown"
   )
-s7
+s5
 
 # add gold baubles
-s8 <- s7 +
+s6 <- s5 +
   geom_point(colour = "gold",
              data = data.frame(
                x = c(0.3, 0.4, 0.5, 0.6, 0.57, 0.62, 0.45, 0.5),
@@ -133,10 +116,10 @@ s8 <- s7 +
              mapping = aes(x = x, y = y, size = size)
   ) +
   scale_size_identity()
-s8
+s6
 
 # add red baubles
-s9 <- s8 +
+s7 <- s6 +
   geom_point(colour = "red3",
              data = data.frame(
                x = c(0.7, 0.6, 0.5, 0.525, 0.43, 0.38, 0.55, 0.5),
@@ -146,10 +129,10 @@ s9 <- s8 +
              mapping = aes(x = x, y = y, size = size)
   ) +
   scale_size_identity()
-s9
+s7
 
 # add text
-s10 <- s9 +
+s8 <- s7 +
   annotate(
     geom = "text",
     x = 0.5,
@@ -159,19 +142,19 @@ s10 <- s9 +
     fontface = "bold",
     size = 18
   )
-s10
+s8
 
 # add logo 
 path <- "images/rwds-logo-150px.png"
 img <- readPNG(path, native = TRUE) 
-s11 <- s10 +                   
+s9 <- s8 +                   
   inset_element(p = img, 
                 left = 0.3265, 
                 bottom = 0.0, 
                 right = 0.6735, 
                 top = 0.2
   ) 
-s11
+s9
 
 ggsave(
   filename = "rwds-christmas-card.png",
